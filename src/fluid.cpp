@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "fluid.h"
 #include "fronteras.h"
 #include "debug.h"
@@ -27,28 +28,34 @@ void fluid::inicializar(int x, int y, int z)
 	Y = y;
 	Z = z;
 
+	flags = (float*)malloc(X*Y*Z*sizeof(float));
+
+	if (flags == NULL) {
+
+			_DEBUG("Error allocating flags");
+			exit(-1);
+	}
+
+	memset(flags, 0, X*Y*Z*sizeof(float));
+
 	vel = new float***[x];
 	fuerza = new float***[x];
 	rho = new float**[x];
-	flags = new float**[x];
 	for(int i=0;i<x;i++)
 	{
 		vel[i] = new float**[y];
 		fuerza[i] = new float**[y];
 		rho[i] = new float*[y];
-		flags[i] = new float*[y];
 		for(int j = 0; j<y;j++)
 		{
 			vel[i][j] = new float*[z];
 			fuerza[i][j] = new float*[z];
 			rho[i][j] = new float[z];
-			flags[i][j] = new float[z];
 			for(int k=0; k<z ; k++)
 			{
 				vel[i][j][k] = new float[3];
 				fuerza[i][j][k] = new float[3];
 				rho[i][j][k] = 0;
-				flags[i][j][k]=0;
 			}
 		}
 	}
@@ -102,7 +109,7 @@ void fluid::stream()
 					if(b<0){b=Y-1;}
 					if(b>(Y-1)){b=0;}
 
-					if(flags[a][b][c] != FLUIDO){
+					if(FLAGS(a, b, c) != FLUIDO){
 						// Bounce - back
 						CELLS(current, i, j, k, l) = CELLS(other, i, j, k, inv);
 					}
@@ -232,7 +239,7 @@ int fluid::guardar(int s) {
 		for(int k = 0 ;k<Z;k++){
 			for(int j = 0 ;j<Y;j++)
 				for(int i = 0 ;i<X;i++)
-					if(flags[i][j][k] == FLUIDO)
+					if(FLAGS(i, j, k) == FLUIDO)
 					{
 						fprintf(archivo, "%f \n", darDensidad(i,j,k));
 					}
