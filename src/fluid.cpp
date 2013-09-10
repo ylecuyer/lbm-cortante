@@ -8,9 +8,9 @@
 #include "helper.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
-      (1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
-      (1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
-      (12./36.)};
+		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
+		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
+		(12./36.)};
 
 float e_x[19] = {1.0f, -1.0f, 0.0f,  0.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 0.0f,  0.0f,  0.0f,  0.0f, 0.0f};
 float e_y[19] = {0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f,  1.0f, -1.0f, -1.0f, 0.0f};
@@ -32,28 +32,34 @@ void fluid::inicializar(int x, int y, int z)
 
 	if (flags == NULL) {
 
-			_DEBUG("Error allocating flags");
-			exit(-1);
+		_DEBUG("Error allocating flags");
+		exit(-1);
 	}
 
 	memset(flags, 0, X*Y*Z*sizeof(float));
 
-	vel = new float***[x];
+	vel = (float*)malloc(X*Y*Z*3*sizeof(float));
+
+	if (vel == NULL) {
+
+		_DEBUG("Error allocating vel");
+		exit(-1);
+	}
+
+	memset(vel, 0, X*Y*Z*3*sizeof(float));
+
 	fuerza = new float***[x];
 	rho = new float**[x];
 	for(int i=0;i<x;i++)
 	{
-		vel[i] = new float**[y];
 		fuerza[i] = new float**[y];
 		rho[i] = new float*[y];
 		for(int j = 0; j<y;j++)
 		{
-			vel[i][j] = new float*[z];
 			fuerza[i][j] = new float*[z];
 			rho[i][j] = new float[z];
 			for(int k=0; k<z ; k++)
 			{
-				vel[i][j][k] = new float[3];
 				fuerza[i][j][k] = new float[3];
 				rho[i][j][k] = 0;
 			}
@@ -123,87 +129,87 @@ void fluid::stream()
 
 	for (int i=0;i<X;i++)
 		for (int j=0;j<Y;j++){
-		velNodoInferior(cells, current, other, X, Y, Z, i, j, 0, U, V, W);
-		velNodoSuperior(cells, current, other, X, Y, Z, i, j, Z-1, U, V, W);
+			velNodoInferior(cells, current, other, X, Y, Z, i, j, 0, U, V, W);
+			velNodoSuperior(cells, current, other, X, Y, Z, i, j, Z-1, U, V, W);
 		}
 }
 
 void fluid::collide()
 {
 	// collision step
-			for (int i=0;i<X;i++)
-				for (int j=0;j<Y;j++)
-					for (int k=0;k<Z;k++) {
+	for (int i=0;i<X;i++)
+		for (int j=0;j<Y;j++)
+			for (int k=0;k<Z;k++) {
 
-						float rho = 0.0, u_x=0.0, u_y=0.0, u_z=0.0;
-						for (int l=0;l<19;l++) {
-							const float fi = CELLS(current, i, j, k, l);
-							rho += fi;
-							u_x += e_x[l]*fi;
-							u_y += e_y[l]*fi;
-							u_z += e_z[l]*fi;
-						}
+				float rho = 0.0, u_x=0.0, u_y=0.0, u_z=0.0;
+				for (int l=0;l<19;l++) {
+					const float fi = CELLS(current, i, j, k, l);
+					rho += fi;
+					u_x += e_x[l]*fi;
+					u_y += e_y[l]*fi;
+					u_z += e_z[l]*fi;
+				}
 
-						u_x = (u_x + (fuerza[i][j][k][0])*(1./2.))/rho;
-						u_y = (u_y + (fuerza[i][j][k][1])*(1./2.))/rho;
-						u_z = (u_z + (fuerza[i][j][k][2])*(1./2.))/rho;
+				u_x = (u_x + (fuerza[i][j][k][0])*(1./2.))/rho;
+				u_y = (u_y + (fuerza[i][j][k][1])*(1./2.))/rho;
+				u_z = (u_z + (fuerza[i][j][k][2])*(1./2.))/rho;
 
-						for (int l=0;l<19;l++) {
-							const float tmp = (e_x[l]*u_x + e_y[l]*u_y + e_z[l]*u_z);
-							// Función de equilibrio
-							float feq = w[l] * rho * ( 1.0 -
-								((3.0/2.0) * (u_x*u_x + u_y*u_y + u_z*u_z)) +
-								(3.0 *     tmp) +
-								((9.0/2.0) * tmp*tmp ) );
-							// Fuerza por cada dirección i
-							float v1[3]={0.0,0.0,0.0};
-							v1[0]=(e_x[l]-u_x)/(cs*cs);
-							v1[1]=(e_y[l]-u_y)/(cs*cs);
-							v1[2]=(e_z[l]-u_z)/(cs*cs);
+				for (int l=0;l<19;l++) {
+					const float tmp = (e_x[l]*u_x + e_y[l]*u_y + e_z[l]*u_z);
+					// Función de equilibrio
+					float feq = w[l] * rho * ( 1.0 -
+							((3.0/2.0) * (u_x*u_x + u_y*u_y + u_z*u_z)) +
+							(3.0 *     tmp) +
+							((9.0/2.0) * tmp*tmp ) );
+					// Fuerza por cada dirección i
+					float v1[3]={0.0,0.0,0.0};
+					v1[0]=(e_x[l]-u_x)/(cs*cs);
+					v1[1]=(e_y[l]-u_y)/(cs*cs);
+					v1[2]=(e_z[l]-u_z)/(cs*cs);
 
-							v1[0]=v1[0]+(tmp*e_x[l])/(cs*cs*cs*cs);
-							v1[1]=v1[1]+(tmp*e_y[l])/(cs*cs*cs*cs);
-							v1[2]=v1[2]+(tmp*e_z[l])/(cs*cs*cs*cs);
+					v1[0]=v1[0]+(tmp*e_x[l])/(cs*cs*cs*cs);
+					v1[1]=v1[1]+(tmp*e_y[l])/(cs*cs*cs*cs);
+					v1[2]=v1[2]+(tmp*e_z[l])/(cs*cs*cs*cs);
 
-							float Fi=0.0, tf=0.0;
-							tf = (v1[0]*fuerza[i][j][k][0] + v1[1]*fuerza[i][j][k][1] + v1[2]*fuerza[i][j][k][2]);
-							Fi = (1.0-(omega/(2.0)))*w[l]*tf;
+					float Fi=0.0, tf=0.0;
+					tf = (v1[0]*fuerza[i][j][k][0] + v1[1]*fuerza[i][j][k][1] + v1[2]*fuerza[i][j][k][2]);
+					Fi = (1.0-(omega/(2.0)))*w[l]*tf;
 
-							CELLS(current, i, j, k, l) = CELLS(current, i, j, k, l) - omega*(CELLS(current, i, j, k, l) - feq) + Fi;
-						}
-					} // ijk
-			// We're done for one time step, switch the grid...
-			other = current;
-			current = (current+1)%2;
+					CELLS(current, i, j, k, l) = CELLS(current, i, j, k, l) - omega*(CELLS(current, i, j, k, l) - feq) + Fi;
+				}
+			} // ijk
+	// We're done for one time step, switch the grid...
+	other = current;
+	current = (current+1)%2;
 }
 
 void fluid::calcularMacro()
 {
 	for(int i = 0 ;i<X;i++)
-			for(int j = 0 ;j<Y;j++)
-				for(int k = 0 ;k<Z;k++)
-				{
-					float rhol=0.0;
-					float u_x=0.0;
-					float u_y=0.0;
-					float u_z=0.0;
+		for(int j = 0 ;j<Y;j++)
+			for(int k = 0 ;k<Z;k++)
+			{
+				float rhol=0.0;
+				float u_x=0.0;
+				float u_y=0.0;
+				float u_z=0.0;
 
-					for(int l = 0 ;l<19;l++){
-						const float fi = CELLS(current, i, j, k, l);
-						rhol+= fi;
-						u_x+=fi*e_x[l];
-						u_y+=fi*e_y[l];
-						u_z+=fi*e_z[l];
-					}
-
-					rho[i][j][k] = rhol;
-					vel[i][j][k][0] = (u_x+fuerza[i][j][k][0])/rhol;
-					vel[i][j][k][1] = (u_y+fuerza[i][j][k][1])/rhol;
-					vel[i][j][k][2] = (u_z+fuerza[i][j][k][2])/rhol;
-					fuerza[i][j][k][0]=0.0;
-					fuerza[i][j][k][1]=0.0;
-					fuerza[i][j][k][2]=0.0;
+				for(int l = 0 ;l<19;l++){
+					const float fi = CELLS(current, i, j, k, l);
+					rhol+= fi;
+					u_x+=fi*e_x[l];
+					u_y+=fi*e_y[l];
+					u_z+=fi*e_z[l];
 				}
+
+				rho[i][j][k] = rhol;
+				VEL(i, j, k, 0) = (u_x+fuerza[i][j][k][0])/rhol;
+				VEL(i, j, k, 1) = (u_y+fuerza[i][j][k][1])/rhol;
+				VEL(i, j, k, 2) = (u_z+fuerza[i][j][k][2])/rhol;
+				fuerza[i][j][k][0]=0.0;
+				fuerza[i][j][k][1]=0.0;
+				fuerza[i][j][k][2]=0.0;
+			}
 }
 
 // Save fluid in structured grid format .vts
@@ -246,7 +252,7 @@ int fluid::guardar(int s) {
 					else{
 						fprintf(archivo, "%f \n", 0.0);
 					}
-				}
+		}
 
 
 		// Velocidad
@@ -254,8 +260,8 @@ int fluid::guardar(int s) {
 		for(int k = 0 ;k<Z;k++){
 			for(int j = 0 ;j<Y;j++)
 				for(int i = 0 ;i<X;i++)
-					fprintf(archivo, "%f %f %f\n", vel[i][j][k][0], vel[i][j][k][1], vel[i][j][k][2]);
-				}
+					fprintf(archivo, "%f %f %f\n", VEL(i, j, k, 0), VEL(i, j, k, 1), VEL(i, j, k, 2));
+		}
 
 		// Escribir vectores fuerza en el algoritmo
 		fprintf(archivo, "VECTORS fuerza float\n");

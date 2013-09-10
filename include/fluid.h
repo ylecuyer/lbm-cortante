@@ -10,7 +10,7 @@ private:
 	int X, Y, Z;
 	float *cells;
 	float *flags;
-	float ****vel;
+	float *vel;
 	float ***rho;
 	float ****fuerza;
 	float U;
