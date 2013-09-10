@@ -107,6 +107,27 @@ fluid::fluid(int x, int y, int z)
 	calcularMacro();
 }
 
+
+float* fluid::get_cells(void) {
+	return cells;
+}
+
+float* fluid::get_flags(void) {
+	return flags;
+}
+
+float* fluid::get_vel(void) {
+	return vel;
+}
+
+float* fluid::get_rho(void) {
+	return rho;
+}
+
+float* fluid::get_fuerza(void) {
+	return fuerza;
+}
+
 void fluid::stream()
 {
 

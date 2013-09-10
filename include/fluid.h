@@ -17,6 +17,12 @@ private:
 
 public:
 
+	float* get_cells(void);
+	float* get_flags(void);
+	float* get_vel(void);
+	float* get_rho(void);
+	float* get_fuerza(void);
+
 	/*
 	 * Función encargada de construir las estructuras de datos en memoria
 	 * 1. Define los nodos que son frontera
