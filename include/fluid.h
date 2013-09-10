@@ -110,7 +110,6 @@ public:
 	fluid() {
 	}
 
-	~fluid() {
-	}
+	~fluid();
 };
 #endif

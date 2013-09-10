@@ -22,6 +22,16 @@ const float V = 0.00, W = 0.00, cs=1.0/sqrt(3.0);
 const float   omega = 1.0;
 int current = 0, other = 1;
 
+fluid::~fluid() {
+
+	free(cells);
+	free(flags);
+	free(vel);
+	free(rho);
+	free(fuerza);
+
+}
+
 void fluid::inicializar(int x, int y, int z)
 {
 	X = x;
