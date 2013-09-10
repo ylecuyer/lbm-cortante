@@ -7,12 +7,15 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	fluid fluido;
-	float dt = 1.0;
-	float dx = 1.0;
 	float X = 51;
 	float Y = 21;
 	float Z = 21;
+
+	fluid fluido(X, Y, Z);
+
+	float dt = 1.0;
+	float dx = 1.0;
+
 	int VTK = 50;
 
 	// Parametros adimensionales
@@ -29,7 +32,6 @@ int main(int argc, char *argv[])
 	printf("A completar %f iteraciones\n", STEPS);
 
 	// Fluido
-	fluido.inicializar(X,Y,Z);
 	fluido.setVelocidad(gamma_dot);
 
 	for(int ts = 0 ; ts < STEPS ; ts++)

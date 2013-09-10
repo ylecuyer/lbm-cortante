@@ -32,7 +32,8 @@ fluid::~fluid() {
 
 }
 
-void fluid::inicializar(int x, int y, int z)
+
+fluid::fluid(int x, int y, int z)
 {
 	X = x;
 	Y = y;

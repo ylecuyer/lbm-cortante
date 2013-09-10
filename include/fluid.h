@@ -107,8 +107,7 @@ public:
 	/*
 	 * Constructor de la clase - no utilizado -
 	 */
-	fluid() {
-	}
+	fluid(int X, int Y, int Z);
 
 	~fluid();
 };
