@@ -28,8 +28,9 @@
 								<option defaultValue="nvcc.compiler.optimization.level.none" id="nvcc.compiler.optimization.level.788789947" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.265698277" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.machine.71700068" name="Architecture (--machine)" superClass="nvcc.compiler.machine" value="nvcc.compiler.machine32" valueType="enumerated"/>
-								<option id="nvcc.compiler.include.paths.893979206" superClass="nvcc.compiler.include.paths" valueType="includePath">
+								<option id="nvcc.compiler.include.paths.893979206" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include/cuda}&quot;"/>
 								</option>
 								<inputType id="nvcc.compiler.input.cu.981660698" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.2117969513" superClass="nvcc.compiler.input.cpp"/>

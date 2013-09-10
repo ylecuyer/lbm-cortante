@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "fluid.h"
+#include "memory.h"
 
 using namespace std;
 
@@ -31,6 +32,17 @@ int main(int argc, char *argv[])
 	float STEPS = 12.0/kp;
 	printf("A completar %f iteraciones\n", STEPS);
 
+	float *cells_d = NULL;
+	float *flags_d = NULL;
+	float *rho_d = NULL;
+	float *fuerza_d = NULL;
+	float *vel_d = NULL;
+
+	alloc_memory_GPU(X, Y, Z, &cells_d, &flags_d, &vel_d, &rho_d, &fuerza_d);
+
+	send_data_to_GPU(X, Y, Z, cells, cells_d, flags, flags_d, vel, vel_d, rho, rho_d, fuerza, fuerza_d);
+
+
 	// Fluido
 	fluido.setVelocidad(gamma_dot);
 
@@ -46,6 +58,10 @@ int main(int argc, char *argv[])
 			printf("%d\n",ts);
 		}
 	}//Ciclo principal
+
+	retrieve_data_from_GPU(X, Y, Z, cells, cells_d, flags, flags_d, vel, vel_d, rho, rho_d, fuerza, fuerza_d);
+
+	free_memory_GPU(cells_d, flags_d, vel_d, rho_d, fuerza_d);
 
 	return 0;
 }
