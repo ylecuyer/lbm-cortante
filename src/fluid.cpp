@@ -48,20 +48,26 @@ void fluid::inicializar(int x, int y, int z)
 
 	memset(vel, 0, X*Y*Z*3*sizeof(float));
 
+	rho = (float*)malloc(X*Y*Z*sizeof(float));
+
+	if (rho == NULL) {
+
+		_DEBUG("Error allocating rho");
+		exit(-1);
+	}
+
+	memset(rho, 0, X*Y*Z*sizeof(float));
+
 	fuerza = new float***[x];
-	rho = new float**[x];
 	for(int i=0;i<x;i++)
 	{
 		fuerza[i] = new float**[y];
-		rho[i] = new float*[y];
 		for(int j = 0; j<y;j++)
 		{
 			fuerza[i][j] = new float*[z];
-			rho[i][j] = new float[z];
 			for(int k=0; k<z ; k++)
 			{
 				fuerza[i][j][k] = new float[3];
-				rho[i][j][k] = 0;
 			}
 		}
 	}
@@ -202,7 +208,7 @@ void fluid::calcularMacro()
 					u_z+=fi*e_z[l];
 				}
 
-				rho[i][j][k] = rhol;
+				RHO(i, j, k) = rhol;
 				VEL(i, j, k, 0) = (u_x+fuerza[i][j][k][0])/rhol;
 				VEL(i, j, k, 1) = (u_y+fuerza[i][j][k][1])/rhol;
 				VEL(i, j, k, 2) = (u_z+fuerza[i][j][k][2])/rhol;

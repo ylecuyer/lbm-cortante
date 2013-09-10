@@ -11,7 +11,7 @@ private:
 	float *cells;
 	float *flags;
 	float *vel;
-	float ***rho;
+	float *rho;
 	float ****fuerza;
 	float U;
 
