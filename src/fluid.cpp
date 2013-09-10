@@ -58,20 +58,15 @@ void fluid::inicializar(int x, int y, int z)
 
 	memset(rho, 0, X*Y*Z*sizeof(float));
 
-	fuerza = new float***[x];
-	for(int i=0;i<x;i++)
-	{
-		fuerza[i] = new float**[y];
-		for(int j = 0; j<y;j++)
-		{
-			fuerza[i][j] = new float*[z];
-			for(int k=0; k<z ; k++)
-			{
-				fuerza[i][j][k] = new float[3];
-			}
-		}
+	fuerza = (float*)malloc(X*Y*Z*3*sizeof(float));
+
+	if (fuerza == NULL) {
+
+		_DEBUG("Error allocating fuerza");
+		exit(-1);
 	}
 
+	memset(fuerza, 0, X*Y*Z*3*sizeof(float));
 
 	cells = (float*)malloc(2*X*Y*Z*19*sizeof(float));
 
@@ -156,9 +151,9 @@ void fluid::collide()
 					u_z += e_z[l]*fi;
 				}
 
-				u_x = (u_x + (fuerza[i][j][k][0])*(1./2.))/rho;
-				u_y = (u_y + (fuerza[i][j][k][1])*(1./2.))/rho;
-				u_z = (u_z + (fuerza[i][j][k][2])*(1./2.))/rho;
+				u_x = (u_x + (FUERZA(i, j, k, 0))*(1./2.))/rho;
+				u_y = (u_y + (FUERZA(i, j, k, 1))*(1./2.))/rho;
+				u_z = (u_z + (FUERZA(i, j, k, 2))*(1./2.))/rho;
 
 				for (int l=0;l<19;l++) {
 					const float tmp = (e_x[l]*u_x + e_y[l]*u_y + e_z[l]*u_z);
@@ -178,7 +173,7 @@ void fluid::collide()
 					v1[2]=v1[2]+(tmp*e_z[l])/(cs*cs*cs*cs);
 
 					float Fi=0.0, tf=0.0;
-					tf = (v1[0]*fuerza[i][j][k][0] + v1[1]*fuerza[i][j][k][1] + v1[2]*fuerza[i][j][k][2]);
+					tf = (v1[0]*FUERZA(i, j, k, 0) + v1[1]*FUERZA(i, j, k, 1) + v1[2]*FUERZA(i, j, k, 2));
 					Fi = (1.0-(omega/(2.0)))*w[l]*tf;
 
 					CELLS(current, i, j, k, l) = CELLS(current, i, j, k, l) - omega*(CELLS(current, i, j, k, l) - feq) + Fi;
@@ -209,12 +204,12 @@ void fluid::calcularMacro()
 				}
 
 				RHO(i, j, k) = rhol;
-				VEL(i, j, k, 0) = (u_x+fuerza[i][j][k][0])/rhol;
-				VEL(i, j, k, 1) = (u_y+fuerza[i][j][k][1])/rhol;
-				VEL(i, j, k, 2) = (u_z+fuerza[i][j][k][2])/rhol;
-				fuerza[i][j][k][0]=0.0;
-				fuerza[i][j][k][1]=0.0;
-				fuerza[i][j][k][2]=0.0;
+				VEL(i, j, k, 0) = (u_x+FUERZA(i, j, k, 0))/rhol;
+				VEL(i, j, k, 1) = (u_y+FUERZA(i, j, k, 1))/rhol;
+				VEL(i, j, k, 2) = (u_z+FUERZA(i, j, k, 2))/rhol;
+				FUERZA(i, j, k, 0)=0.0;
+				FUERZA(i, j, k, 1)=0.0;
+				FUERZA(i, j, k, 2)=0.0;
 			}
 }
 
@@ -275,7 +270,7 @@ int fluid::guardar(int s) {
 			for(int j = 0 ;j<Y;j++)
 				for(int i = 0 ;i<X;i++)
 				{
-					fprintf(archivo, "%f %f %f\n", fuerza[i][j][k][0], fuerza[i][j][k][0], fuerza[i][j][k][0]);
+					fprintf(archivo, "%f %f %f\n", FUERZA(i, j, k, 0), FUERZA(i, j, k, 0), FUERZA(i, j, k, 0));
 				}
 		fclose(archivo);/*Cerramos el archivo*/
 		return 0;
@@ -302,16 +297,16 @@ float fluid::darDensidad(int x, int y, int z)
 
 void fluid::setFuerza(int x, int y, int z, float f[3])
 {
-	fuerza[x][y][z][0] = f[0];
-	fuerza[x][y][z][1] = f[1];
-	fuerza[x][y][z][2] = f[2];
+	FUERZA(x, y, z, 0) = f[0];
+	FUERZA(x, y, z, 1) = f[1];
+	FUERZA(x, y, z, 2) = f[2];
 }
 
 void fluid::addFuerza(int x, int y, int z, float f[3])
 {
-	fuerza[x][y][z][0] += f[0];
-	fuerza[x][y][z][1] += f[1];
-	fuerza[x][y][z][2] += f[2];
+	FUERZA(x, y, z, 0) += f[0];
+	FUERZA(x, y, z, 1) += f[1];
+	FUERZA(x, y, z, 2) += f[2];
 }
 
 

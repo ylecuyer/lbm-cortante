@@ -12,7 +12,7 @@ private:
 	float *flags;
 	float *vel;
 	float *rho;
-	float ****fuerza;
+	float *fuerza;
 	float U;
 
 public:

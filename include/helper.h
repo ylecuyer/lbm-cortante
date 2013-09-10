@@ -7,5 +7,6 @@
 #define FLAGS(x, y, z) ACCESS3(flags, X, Y, Z, x, y, z)
 #define VEL(x, y, z, k) ACCESS4(vel, X, Y, Z, 3, x, y, z, k)
 #define RHO(x, y, z) ACCESS3(rho, X, Y, Z, x, y, z)
+#define FUERZA(x, y, z, k) ACCESS4(fuerza, X, Y, Z, 3, x, y, z, k)
 
 #endif
