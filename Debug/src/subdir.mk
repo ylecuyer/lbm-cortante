@@ -5,27 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/cortante.cpp \
-../src/elemento.cpp \
 ../src/fluid.cpp \
-../src/fronteras.cpp \
-../src/ibm.cpp \
-../src/mesh.cpp 
+../src/fronteras.cpp 
 
 OBJS += \
 ./src/cortante.o \
-./src/elemento.o \
 ./src/fluid.o \
-./src/fronteras.o \
-./src/ibm.o \
-./src/mesh.o 
+./src/fronteras.o 
 
 CPP_DEPS += \
 ./src/cortante.d \
-./src/elemento.d \
 ./src/fluid.d \
-./src/fronteras.d \
-./src/ibm.d \
-./src/mesh.d 
+./src/fronteras.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

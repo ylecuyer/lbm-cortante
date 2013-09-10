@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
-#include <omp.h>
-#include "ibm.h"
 #include "fluid.h"
-#include "mesh.h"
 
 using namespace std;
 
@@ -37,7 +33,7 @@ int main(int argc, char *argv[])
 	fluido.setVelocidad(gamma_dot);
 
 	for(int ts = 0 ; ts < STEPS ; ts++)
-		{
+	{
 		fluido.collide();
 		fluido.stream();
 		fluido.calcularMacro();

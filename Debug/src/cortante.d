@@ -41,8 +41,4 @@ src/cortante.o : ../src/cortante.cpp \
     /usr/include/bits/nan.h \
     /usr/include/bits/mathdef.h \
     /usr/include/bits/mathcalls.h \
-    /usr/include/string.h \
-    /usr/lib/gcc/x86_64-unknown-linux-gnu/4.8.1/include/omp.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/ibm.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/mesh.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/fluid.h
