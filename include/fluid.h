@@ -42,7 +42,7 @@ public:
 	 * 1. Calcular la función de equilibrio en cada celda utilizando Ec 5.
 	 * 2. Calcular el valor del operador de colisión utilizando Ec 3.
 	 */
-	void collide();
+	void collide(float *cells_d, float *fuerza_d);
 
 	/*
 	 * Esta función se encarga de guardar todas las variables macroscópicas del fluido en un archivo

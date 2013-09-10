@@ -46,4 +46,5 @@ src/fluid.o : ../src/fluid.cpp \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/fronteras.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/debug.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/helper.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/collide.h

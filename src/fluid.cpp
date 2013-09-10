@@ -6,6 +6,7 @@
 #include "fronteras.h"
 #include "debug.h"
 #include "helper.h"
+#include "collide.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
 		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
@@ -167,50 +168,10 @@ void fluid::stream()
 		}
 }
 
-void fluid::collide()
+void fluid::collide(float *cells_d, float*fuerza_d)
 {
-	// collision step
-	for (int i=0;i<X;i++)
-		for (int j=0;j<Y;j++)
-			for (int k=0;k<Z;k++) {
+	collide_wrapper(X, Y, Z, cells_d, fuerza_d, current);
 
-				float rho = 0.0, u_x=0.0, u_y=0.0, u_z=0.0;
-				for (int l=0;l<19;l++) {
-					const float fi = CELLS(current, i, j, k, l);
-					rho += fi;
-					u_x += e_x[l]*fi;
-					u_y += e_y[l]*fi;
-					u_z += e_z[l]*fi;
-				}
-
-				u_x = (u_x + (FUERZA(i, j, k, 0))*(1./2.))/rho;
-				u_y = (u_y + (FUERZA(i, j, k, 1))*(1./2.))/rho;
-				u_z = (u_z + (FUERZA(i, j, k, 2))*(1./2.))/rho;
-
-				for (int l=0;l<19;l++) {
-					const float tmp = (e_x[l]*u_x + e_y[l]*u_y + e_z[l]*u_z);
-					// Función de equilibrio
-					float feq = w[l] * rho * ( 1.0 -
-							((3.0/2.0) * (u_x*u_x + u_y*u_y + u_z*u_z)) +
-							(3.0 *     tmp) +
-							((9.0/2.0) * tmp*tmp ) );
-					// Fuerza por cada dirección i
-					float v1[3]={0.0,0.0,0.0};
-					v1[0]=(e_x[l]-u_x)/(cs*cs);
-					v1[1]=(e_y[l]-u_y)/(cs*cs);
-					v1[2]=(e_z[l]-u_z)/(cs*cs);
-
-					v1[0]=v1[0]+(tmp*e_x[l])/(cs*cs*cs*cs);
-					v1[1]=v1[1]+(tmp*e_y[l])/(cs*cs*cs*cs);
-					v1[2]=v1[2]+(tmp*e_z[l])/(cs*cs*cs*cs);
-
-					float Fi=0.0, tf=0.0;
-					tf = (v1[0]*FUERZA(i, j, k, 0) + v1[1]*FUERZA(i, j, k, 1) + v1[2]*FUERZA(i, j, k, 2));
-					Fi = (1.0-(omega/(2.0)))*w[l]*tf;
-
-					CELLS(current, i, j, k, l) = CELLS(current, i, j, k, l) - omega*(CELLS(current, i, j, k, l) - feq) + Fi;
-				}
-			} // ijk
 	// We're done for one time step, switch the grid...
 	other = current;
 	current = (current+1)%2;

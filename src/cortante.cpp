@@ -54,18 +54,20 @@ int main(int argc, char *argv[])
 
 	for(int ts = 0 ; ts < STEPS ; ts++)
 	{
-		fluido.collide();
+		fluido.collide(cells_d, fuerza_d);
 		fluido.stream();
 		fluido.calcularMacro();
 
 		if(ts%VTK==0)
 		{
-			fluido.guardar(ts);
 			printf("%d\n",ts);
+
+			retrieve_data_from_GPU(X, Y, Z, cells_f, cells_d, flags_f, flags_d, vel_f, vel_d, rho_f, rho_d, fuerza_f, fuerza_d);
+
+			fluido.guardar(ts);
 		}
 	}//Ciclo principal
 
-	retrieve_data_from_GPU(X, Y, Z, cells_f, cells_d, flags_f, flags_d, vel_f, vel_d, rho_f, rho_d, fuerza_f, fuerza_d);
 
 	free_memory_GPU(cells_d, flags_d, vel_d, rho_d, fuerza_d);
 
