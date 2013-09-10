@@ -1,10 +1,10 @@
-#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
 #include "fluid.h"
 #include "fronteras.h"
+#include "debug.h"
+#include "helper.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
       (1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
@@ -53,36 +53,32 @@ void fluid::inicializar(int x, int y, int z)
 		}
 	}
 
-	cells = new float****[2];
-	for(int s=0;s<2;s++)
+
+	cells = (float*)malloc(2*X*Y*Z*19*sizeof(float));
+
+	if (cells == NULL) {
+
+		_DEBUG("Error allocating cells");
+		exit(-1);
+	}
+
+	for(int s = 0; s < 2; s++)
 	{
-		cells[s]=new float***[x];
-		for(int i=0;i<x;i++)
+		for(int i = 0; i < X; i++)
 		{
-			cells[s][i]=new float**[y];
-			for(int j = 0; j<y;j++)
+			for(int j = 0; j < Y; j++)
 			{
-				cells[s][i][j]=new float*[z];
-				for(int k=0; k<z ; k++)
+				for(int k = 0; k < Z; k++)
 				{
-					cells[s][i][j][k]=new float[19];
-					for(int l=0;l<19;l++)
+					for(int l = 0; l < 19; l++)
 					{
-						cells[s][i][j][k][l] = w[l];
+						CELLS(s, i, j, k, l) = w[l];
 					}
 				}
 			}
 		}
 	}
 
-	for (int i=0;i<X;i++)
-		for (int j=0;j<Y;j++)
-			for (int k=0;k<Z;k++) {
-				for (int l=0;l<19;l++)  {
-					cells[0][i][j][k][l] = w[l];
-					cells[1][i][j][k][l] = w[l];
-				}
-			}
 	calcularMacro();
 }
 
@@ -108,18 +104,20 @@ void fluid::stream()
 
 					if(flags[a][b][c] != FLUIDO){
 						// Bounce - back
-						cells[current][i][j][k][l] = cells[other][i][j][k][inv];}
+						CELLS(current, i, j, k, l) = CELLS(other, i, j, k, inv);
+					}
 					else{
 
 						// Streaming - normal
-						cells[current][i][j][k][l] = cells[other][a][b][c][l];}
+						CELLS(current, i, j, k, l) = CELLS(other, a, b, c, l);
+					}
 
 				}//Stream
 
 	for (int i=0;i<X;i++)
 		for (int j=0;j<Y;j++){
-		velNodoInferior(cells[current][i][j][0],cells[other][i][j][0], U, V, W);
-		velNodoSuperior(cells[current][i][j][Z-1],cells[other][i][j][Z-1], U, V, W);
+		velNodoInferior(cells, current, other, X, Y, Z, i, j, 0, U, V, W);
+		velNodoSuperior(cells, current, other, X, Y, Z, i, j, Z-1, U, V, W);
 		}
 }
 
@@ -132,7 +130,7 @@ void fluid::collide()
 
 						float rho = 0.0, u_x=0.0, u_y=0.0, u_z=0.0;
 						for (int l=0;l<19;l++) {
-							const float fi = cells[current][i][j][k][l];
+							const float fi = CELLS(current, i, j, k, l);
 							rho += fi;
 							u_x += e_x[l]*fi;
 							u_y += e_y[l]*fi;
@@ -164,7 +162,7 @@ void fluid::collide()
 							tf = (v1[0]*fuerza[i][j][k][0] + v1[1]*fuerza[i][j][k][1] + v1[2]*fuerza[i][j][k][2]);
 							Fi = (1.0-(omega/(2.0)))*w[l]*tf;
 
-							cells[current][i][j][k][l] = cells[current][i][j][k][l] - omega*(cells[current][i][j][k][l] - feq) + Fi;
+							CELLS(current, i, j, k, l) = CELLS(current, i, j, k, l) - omega*(CELLS(current, i, j, k, l) - feq) + Fi;
 						}
 					} // ijk
 			// We're done for one time step, switch the grid...
@@ -184,7 +182,7 @@ void fluid::calcularMacro()
 					float u_z=0.0;
 
 					for(int l = 0 ;l<19;l++){
-						const float fi = cells[current][i][j][k][l];
+						const float fi = CELLS(current, i, j, k, l);
 						rhol+= fi;
 						u_x+=fi*e_x[l];
 						u_y+=fi*e_y[l];
@@ -278,7 +276,7 @@ float fluid::darDensidad(int x, int y, int z)
 	float rho = 0.0;
 	for(int l = 0; l < 19 ; l++)
 	{
-		rho += cells[current][x][y][z][l];
+		rho += CELLS(current, x, y, z, l);
 	}
 	return rho;
 }

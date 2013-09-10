@@ -42,4 +42,6 @@ src/fronteras.o : ../src/fronteras.cpp \
     /usr/include/bits/mathdef.h \
     /usr/include/bits/mathcalls.h \
     /usr/include/string.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/fronteras.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/fronteras.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/helper.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h

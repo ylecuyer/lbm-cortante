@@ -1,6 +1,5 @@
 src/fluid.o : ../src/fluid.cpp \
     /usr/include/stdc-predef.h \
-    /usr/lib/gcc/x86_64-unknown-linux-gnu/4.8.1/include/omp.h \
     /usr/include/stdio.h \
     /usr/include/features.h \
     /usr/include/sys/cdefs.h \
@@ -42,6 +41,8 @@ src/fluid.o : ../src/fluid.cpp \
     /usr/include/bits/nan.h \
     /usr/include/bits/mathdef.h \
     /usr/include/bits/mathcalls.h \
-    /usr/include/string.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/fluid.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/fronteras.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/fronteras.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/debug.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/helper.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h
