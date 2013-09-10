@@ -32,6 +32,12 @@ int main(int argc, char *argv[])
 	float STEPS = 12.0/kp;
 	printf("A completar %f iteraciones\n", STEPS);
 
+	float *cells_f = fluido.get_cells();
+	float *flags_f = fluido.get_flags();
+	float *rho_f = fluido.get_rho();
+	float *fuerza_f = fluido.get_fuerza();
+	float *vel_f = fluido.get_vel();
+
 	float *cells_d = NULL;
 	float *flags_d = NULL;
 	float *rho_d = NULL;
@@ -40,7 +46,7 @@ int main(int argc, char *argv[])
 
 	alloc_memory_GPU(X, Y, Z, &cells_d, &flags_d, &vel_d, &rho_d, &fuerza_d);
 
-	send_data_to_GPU(X, Y, Z, cells, cells_d, flags, flags_d, vel, vel_d, rho, rho_d, fuerza, fuerza_d);
+	send_data_to_GPU(X, Y, Z, cells_f, cells_d, flags_f, flags_d, vel_f, vel_d, rho_f, rho_d, fuerza_f, fuerza_d);
 
 
 	// Fluido
@@ -59,7 +65,7 @@ int main(int argc, char *argv[])
 		}
 	}//Ciclo principal
 
-	retrieve_data_from_GPU(X, Y, Z, cells, cells_d, flags, flags_d, vel, vel_d, rho, rho_d, fuerza, fuerza_d);
+	retrieve_data_from_GPU(X, Y, Z, cells_f, cells_d, flags_f, flags_d, vel_f, vel_d, rho_f, rho_d, fuerza_f, fuerza_d);
 
 	free_memory_GPU(cells_d, flags_d, vel_d, rho_d, fuerza_d);
 
