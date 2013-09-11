@@ -7,19 +7,22 @@ CU_SRCS += \
 ../src/cuda/calcular_macro.cu \
 ../src/cuda/collide.cu \
 ../src/cuda/memory.cu \
-../src/cuda/stream.cu 
+../src/cuda/stream.cu \
+../src/cuda/vel_nodo.cu 
 
 CU_DEPS += \
 ./src/cuda/calcular_macro.d \
 ./src/cuda/collide.d \
 ./src/cuda/memory.d \
-./src/cuda/stream.d 
+./src/cuda/stream.d \
+./src/cuda/vel_nodo.d 
 
 OBJS += \
 ./src/cuda/calcular_macro.o \
 ./src/cuda/collide.o \
 ./src/cuda/memory.o \
-./src/cuda/stream.o 
+./src/cuda/stream.o \
+./src/cuda/vel_nodo.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

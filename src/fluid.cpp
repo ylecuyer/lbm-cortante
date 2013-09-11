@@ -9,6 +9,7 @@
 #include "collide.h"
 #include "stream.h"
 #include "calcular_macro.h"
+#include "vel_nodo.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
 		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
@@ -138,11 +139,8 @@ void fluid::stream(float *cells_d, float *flags_d)
 
 	stream_wrapper(X, Y, Z, cells_d, current, other, flags_d);
 
-	for (int i=0;i<X;i++)
-		for (int j=0;j<Y;j++){
-			velNodoInferior(cells, current, other, X, Y, Z, i, j, 0, U, V, W);
-			velNodoSuperior(cells, current, other, X, Y, Z, i, j, Z-1, U, V, W);
-		}
+			wrapper_velNodoInferior(cells_d, current, other, X, Y, Z, U, V, W);
+			wrapper_velNodoSuperior(cells_d, current, other, X, Y, Z, U, V, W);
 }
 
 void fluid::collide(float *cells_d, float*fuerza_d)

@@ -49,4 +49,5 @@ src/fluid.o : ../src/fluid.cpp \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/collide.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/stream.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/calcular_macro.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/calcular_macro.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/vel_nodo.h
