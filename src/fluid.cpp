@@ -7,6 +7,7 @@
 #include "debug.h"
 #include "helper.h"
 #include "collide.h"
+#include "stream.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
 		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
@@ -129,37 +130,10 @@ float* fluid::get_fuerza(void) {
 	return fuerza;
 }
 
-void fluid::stream()
+void fluid::stream(float *cells_d, float *flags_d)
 {
 
-	for (int i=0;i<X;i++)
-		for (int j=0;j<Y;j++)
-			for (int k=1;k<Z-1;k++)
-				for (int l=0;l<19;l++) {
-					int inv = dfInv[l];
-					int a = i + e_x[inv];
-					int b = j + e_y[inv];
-					int c = k + e_z[inv];
-
-					// Periodico en x
-					if(a<0){a=X-1;}
-					if(a>(X-1)){a=0;}
-
-					// Periodico en y
-					if(b<0){b=Y-1;}
-					if(b>(Y-1)){b=0;}
-
-					if(FLAGS(a, b, c) != FLUIDO){
-						// Bounce - back
-						CELLS(current, i, j, k, l) = CELLS(other, i, j, k, inv);
-					}
-					else{
-
-						// Streaming - normal
-						CELLS(current, i, j, k, l) = CELLS(other, a, b, c, l);
-					}
-
-				}//Stream
+	stream_wrapper(X, Y, Z, cells_d, current, other, flags_d);
 
 	for (int i=0;i<X;i++)
 		for (int j=0;j<Y;j++){

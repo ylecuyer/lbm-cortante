@@ -34,7 +34,7 @@ public:
 	 * Implementa el paso de streaming referido en la Ecuación 3, del documento guía.
 	 * 1. Se encarga de propagar las funciones de distribución actuales hacia la siguiente celda
 	 */
-	void stream();
+	void stream(float *cells_d, float *flags_d);
 
 	/*
 	 * Implementa el paso de colisión utilizando la aproximación BGK Ec 2. y la función de equilibrio

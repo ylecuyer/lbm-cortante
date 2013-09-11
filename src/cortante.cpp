@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	for(int ts = 0 ; ts < STEPS ; ts++)
 	{
 		fluido.collide(cells_d, fuerza_d);
-		fluido.stream();
+		fluido.stream(cells_d, flags_d);
 		fluido.calcularMacro();
 
 		if(ts%VTK==0)

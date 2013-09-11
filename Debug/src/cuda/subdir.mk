@@ -5,15 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CU_SRCS += \
 ../src/cuda/collide.cu \
-../src/cuda/memory.cu 
+../src/cuda/memory.cu \
+../src/cuda/stream.cu 
 
 CU_DEPS += \
 ./src/cuda/collide.d \
-./src/cuda/memory.d 
+./src/cuda/memory.d \
+./src/cuda/stream.d 
 
 OBJS += \
 ./src/cuda/collide.o \
-./src/cuda/memory.o 
+./src/cuda/memory.o \
+./src/cuda/stream.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
