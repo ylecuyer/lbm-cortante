@@ -16,9 +16,9 @@ __global__ void stream(int X, int Y, int Z, float *cells_d, int current, int oth
 	int j = blockIdx.y*blockDim.y + threadIdx.y;
 	int k = blockIdx.z*blockDim.z + threadIdx.z;
 
-	if (i < X && j < Y && k > 0 &&  k < Z) {
+	if (i < X && j < Y && k > 0 &&  k < Z-1) {
 
-		for (int l=0;l<19;l++) {
+		for (int l = 0; l < 19; l++) {
 			int inv = dfInv[l];
 			int a = i + e_x[inv];
 			int b = j + e_y[inv];
@@ -26,18 +26,18 @@ __global__ void stream(int X, int Y, int Z, float *cells_d, int current, int oth
 
 			// Periodico en x
 			if (a < 0) {
-				a = X - 1;
+				a = X-1;
 			}
 
-			if (a > X - 1) {
+			if (a > X-1) {
 				a = 0;
 			}
 
 			// Periodico en y
 			if (b < 0) {
-				b = Y - 1;
+				b = Y-1;
 			}
-			if( b > Y - 1) {
+			if( b > Y-1) {
 				b = 0;
 			}
 
