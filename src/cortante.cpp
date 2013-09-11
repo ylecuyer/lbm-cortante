@@ -50,13 +50,16 @@ int main(int argc, char *argv[])
 
 
 	// Fluido
+	//From fluid constructor
+	fluido.calcularMacro(cells_d, rho_d, vel_d, fuerza_d);
 	fluido.setVelocidad(gamma_dot);
+
 
 	for(int ts = 0 ; ts < STEPS ; ts++)
 	{
 		fluido.collide(cells_d, fuerza_d);
 		fluido.stream(cells_d, flags_d);
-		fluido.calcularMacro();
+		fluido.calcularMacro(cells_d, rho_d, vel_d, fuerza_d);
 
 		if(ts%VTK==0)
 		{

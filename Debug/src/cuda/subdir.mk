@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CU_SRCS += \
+../src/cuda/calcular_macro.cu \
 ../src/cuda/collide.cu \
 ../src/cuda/memory.cu \
 ../src/cuda/stream.cu 
 
 CU_DEPS += \
+./src/cuda/calcular_macro.d \
 ./src/cuda/collide.d \
 ./src/cuda/memory.d \
 ./src/cuda/stream.d 
 
 OBJS += \
+./src/cuda/calcular_macro.o \
 ./src/cuda/collide.o \
 ./src/cuda/memory.o \
 ./src/cuda/stream.o 

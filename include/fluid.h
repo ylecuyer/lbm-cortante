@@ -102,7 +102,7 @@ public:
 	 * Calcula el valor de todas las variables macroscópicas en el fluido densidad, velocidad, presión
 	 * el valor es almacenado en cada atributo de la clase fluid
 	 */
-	void calcularMacro();
+	void calcularMacro(float *cells_d, float *rho_d, float *vel_d, float *fuerza_d);
 
 	/*
 	 * Esta función se utiliza únicamente para crear el flujo cortante, en donde u corresponde a

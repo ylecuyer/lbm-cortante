@@ -8,6 +8,7 @@
 #include "helper.h"
 #include "collide.h"
 #include "stream.h"
+#include "calcular_macro.h"
 
 float w[19] = {(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),(2./36.),
 		(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),(1./36.),
@@ -106,7 +107,9 @@ fluid::fluid(int x, int y, int z)
 		}
 	}
 
-	calcularMacro();
+	//Calcular macro moved to cortante
+	//calcularMacro(X, Y, Z, cells_d, current, rho_d, vel_d, fuerza_d);
+
 }
 
 
@@ -151,33 +154,11 @@ void fluid::collide(float *cells_d, float*fuerza_d)
 	current = (current+1)%2;
 }
 
-void fluid::calcularMacro()
+void fluid::calcularMacro(float *cells_d, float *rho_d, float *vel_d, float *fuerza_d)
 {
-	for(int i = 0 ;i<X;i++)
-		for(int j = 0 ;j<Y;j++)
-			for(int k = 0 ;k<Z;k++)
-			{
-				float rhol=0.0;
-				float u_x=0.0;
-				float u_y=0.0;
-				float u_z=0.0;
 
-				for(int l = 0 ;l<19;l++){
-					const float fi = CELLS(current, i, j, k, l);
-					rhol+= fi;
-					u_x+=fi*e_x[l];
-					u_y+=fi*e_y[l];
-					u_z+=fi*e_z[l];
-				}
+	calcular_macro_wrapper(X, Y, Z, cells_d, current, rho_d, vel_d, fuerza_d);
 
-				RHO(i, j, k) = rhol;
-				VEL(i, j, k, 0) = (u_x+FUERZA(i, j, k, 0))/rhol;
-				VEL(i, j, k, 1) = (u_y+FUERZA(i, j, k, 1))/rhol;
-				VEL(i, j, k, 2) = (u_z+FUERZA(i, j, k, 2))/rhol;
-				FUERZA(i, j, k, 0)=0.0;
-				FUERZA(i, j, k, 1)=0.0;
-				FUERZA(i, j, k, 2)=0.0;
-			}
 }
 
 // Save fluid in structured grid format .vts
