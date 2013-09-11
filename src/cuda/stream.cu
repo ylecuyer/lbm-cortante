@@ -16,7 +16,7 @@ __global__ void stream(int X, int Y, int Z, float *cells_d, int current, int oth
 	int j = blockIdx.y*blockDim.y + threadIdx.y;
 	int k = blockIdx.z*blockDim.z + threadIdx.z;
 
-	if (i < X && j < Y && k < Z) {
+	if (i < X && j < Y && k > 0 &&  k < Z) {
 
 		for (int l=0;l<19;l++) {
 			int inv = dfInv[l];
@@ -39,14 +39,6 @@ __global__ void stream(int X, int Y, int Z, float *cells_d, int current, int oth
 			}
 			if( b > Y - 1) {
 				b = 0;
-			}
-
-			// ??? en z
-			if (c < 0) {
-				c = 0;
-			}
-			if( c > Z - 1) {
-				c = Z - 1;
 			}
 
 			if(FLAGS_D(a, b, c) != FLUIDO){
