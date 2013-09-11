@@ -196,10 +196,10 @@ int fluid::guardar(int s) {
 				for(int i = 0 ;i<X;i++)
 					if(FLAGS(i, j, k) == FLUIDO)
 					{
-						fprintf(archivo, "%f \n", darDensidad(i,j,k));
+						fprintf(archivo, "%e \n", darDensidad(i,j,k));
 					}
 					else{
-						fprintf(archivo, "%f \n", 0.0);
+						fprintf(archivo, "%e \n", 0.0);
 					}
 		}
 
@@ -209,7 +209,7 @@ int fluid::guardar(int s) {
 		for(int k = 0 ;k<Z;k++){
 			for(int j = 0 ;j<Y;j++)
 				for(int i = 0 ;i<X;i++)
-					fprintf(archivo, "%f %f %f\n", VEL(i, j, k, 0), VEL(i, j, k, 1), VEL(i, j, k, 2));
+					fprintf(archivo, "%e %e %e\n", VEL(i, j, k, 0), VEL(i, j, k, 1), VEL(i, j, k, 2));
 		}
 
 		// Escribir vectores fuerza en el algoritmo
@@ -218,7 +218,7 @@ int fluid::guardar(int s) {
 			for(int j = 0 ;j<Y;j++)
 				for(int i = 0 ;i<X;i++)
 				{
-					fprintf(archivo, "%f %f %f\n", FUERZA(i, j, k, 0), FUERZA(i, j, k, 0), FUERZA(i, j, k, 0));
+					fprintf(archivo, "%e %e %e\n", FUERZA(i, j, k, 0), FUERZA(i, j, k, 0), FUERZA(i, j, k, 0));
 				}
 		fclose(archivo);/*Cerramos el archivo*/
 		return 0;
