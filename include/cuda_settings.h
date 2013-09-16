@@ -2,8 +2,8 @@
 #define _CUDA_SETTINGS_H_
 
 #define GRID_SIZE_X 6
-#define GRID_SIZE_Y 6
-#define GRID_SIZE_Z 6
+#define GRID_SIZE_Y 3
+#define GRID_SIZE_Z 3
 
 //Maximum number of threads per block:           1024
 

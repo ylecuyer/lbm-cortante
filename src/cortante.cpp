@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	_mkdir("temp");
 #else
 	mkdir("temp", 0777);
+
 #endif
 
 	float X = 51;
