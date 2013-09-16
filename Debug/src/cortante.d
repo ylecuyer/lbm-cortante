@@ -42,4 +42,6 @@ src/cortante.o : ../src/cortante.cpp \
     /usr/include/bits/mathdef.h \
     /usr/include/bits/mathcalls.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/fluid.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/memory.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda/memory.h \
+    /usr/include/sys/stat.h \
+    /usr/include/bits/stat.h

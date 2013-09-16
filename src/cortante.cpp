@@ -4,10 +4,24 @@
 #include "fluid.h"
 #include "memory.h"
 
+#if defined(_WIN32)
+	#include <direct.h>
+#else
+	#include <sys/stat.h>
+	#include <sys/types.h>
+#endif
+
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+
+#if defined(_WIN32)
+	_mkdir("temp");
+#else
+	mkdir("temp", 0777);
+#endif
+
 	float X = 51;
 	float Y = 21;
 	float Z = 21;
