@@ -1,6 +1,5 @@
 #include "helper.h"
-
-#define GRID_SIZE 6
+#include "cuda_settings.h"
 
 __global__ void calcular_macro(int X, int Y, int Z, float *cells_d, int current, float *rho_d, float *vel_d, float *fuerza_d) {
 
@@ -50,15 +49,15 @@ void calcular_macro_wrapper(int X, int Y, int Z, float *cells_d, int current, fl
 	//Maximum number of threads per block:           1024
 
 	dim3 grid_size;
-	grid_size.x = GRID_SIZE;
-	grid_size.y = GRID_SIZE;
-	grid_size.z = GRID_SIZE;
+	grid_size.x = GRID_SIZE_X;
+	grid_size.y = GRID_SIZE_Y;
+	grid_size.z = GRID_SIZE_Z;
 
 	dim3 block_size;
 	// 1000 threads per blocks
-	block_size.x = 10;
-	block_size.y = 10;
-	block_size.z = 10;
+	block_size.x = BLOCK_SIZE_X;
+	block_size.y = BLOCK_SIZE_Y;
+	block_size.z = BLOCK_SIZE_Z;
 
 	//Launch kernel
 	calcular_macro<<<grid_size, block_size>>>(X, Y, Z, cells_d, current, rho_d, vel_d, fuerza_d);

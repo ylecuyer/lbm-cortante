@@ -91,4 +91,5 @@ src/cuda/collide.o : ../src/cuda/collide.cu \
     /opt/cuda/bin/..//include/surface_indirect_functions.h \
     /opt/cuda/bin/..//include/device_launch_parameters.h \
     /home/ylecuyer/cuda-workspace/lbm-cortante/include/helper.h \
-    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/nd-array.h \
+    /home/ylecuyer/cuda-workspace/lbm-cortante/include/cuda_settings.h
